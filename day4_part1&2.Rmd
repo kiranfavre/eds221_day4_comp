@@ -1,0 +1,38 @@
+---
+title: "eds221_day4_comp"
+author: "Kiran Favre"
+date: "2022-08-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### for loop examples
+
+```{r}
+dosage <- c(10, 100, 1000)
+
+dose_index <- vector(mode = "character", length = length(dosage))
+
+for (i in seq_along(dosage)) {
+  k <- paste0("zinc_", dosage[i])
+  dose_index[i] <- k
+}
+
+dose_index[i]
+```
+
+### A nested for loop example
+
+```{r}
+file_prefix <- c("temp", "ph", "salinity")
+file_suffix <- c(1, 2, 3, 4, 5)
+
+for(i in seq_along(file_prefix)) {
+  for (j in seq_along(file_suffix)) {
+    print(paste0(file_prefix[i], "_", file_suffix[j]))
+  }
+}
+```
