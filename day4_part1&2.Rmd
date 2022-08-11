@@ -223,3 +223,103 @@ for (i in seq_along(first_name)) {
 
 full_names
 ```
+
+#### Logistic growth
+
+shortcut for inputting a function: ctrl + alt + x
+
+```{r}
+calc_log_growth <- function(K, N0, r, time) {
+  K / (1 + ((K-N0) / N0) * exp(-r * time))
+}
+
+#test: 
+calc_log_growth(K = 5000, N0 = 300, r = 0.4, time = 56)
+```
+
+```{r}
+time_vector <- seq(from = 0, to = 35, by = 0.1)
+
+#running thru a vector of times
+pop_35 <- calc_log_growth(N0 = 100, K = 6000, r = 0.1, time = time_vector)
+
+pop_time35_df <- data.frame(time_vector, pop_35)
+
+ggplot(pop_time35_df, aes(x = time_vector, y = pop_35)) + geom_line(color= "purple")
+```
+
+we can make this vector another way
+
+```{r}
+pop_35_vec <- vector(mode = "numeric", length = length(time_vec))
+
+for (i in seq_along(time_vec)) {
+  population <- calc_log_growth(N0 = 100, K = 6000, r = 0.27, time = time_vector[i])
+  pop_35_vec[i] <- population
+}
+```
+
+```{r}
+#make the sequence of growth rates
+r_seq <- seq(from = 0.20, to = 0.4, by = 0.01)
+
+out_matrix <- matrix( nrow = length(time_vector), ncol = length(r_seq))
+
+for(i in seq_along(r_seq)) {
+  for (j in seq_along(time_vector)) {
+    pop <- calc_log_growth(N0 = 100, K = 4000, r = r_seq[i], time = time_vector[j])
+    out_matrix[j, i] <- pop
+  }
+}
+
+## now some wrangling
+
+logistic_df <- data.frame(out_matrix, time = time_vector)
+
+#change column names in logistic data frame, and make it gr+ the values in r_seq and time for another column name to match vector
+colnames(logistic_df) <- c(paste0("gr_", r_seq), "time")  
+
+
+logistic_df_long <- logistic_df |> 
+  pivot_longer(cols = -time, values_to = "population", names_to = "growth_rate")   ##what column do you want to pivot longer?
+
+
+ggplot(logistic_df_long, aes(x =time, y = population)) + geom_line(aes(color = growth_rate))
+```
+
+### A function with warnings and error messages
+
+Use `warning` to add a warning
+
+Use `stop` to add an error
+
+We want to code this eqn:
+
+$$
+P=0.3\rho A v^3
+$$
+
+where
+
+rho = air density (kg/m\^3)
+
+a = area covered by turbine (m\^2)
+
+v = wind velocity (m/s)
+
+```{r}
+calc_windpower <- function(rho, radius, windspeed) {
+  if (windspeed > 130) {
+    warning("whoa, that's really fast. Are you sure?") 
+  }
+  if (rho > 1.225) {
+    warning("that air density is suspicious")
+  }
+  if (radius < 0) {
+    stop("Rotor radius must be a positive value (meters).")
+  }
+  0.3*rho*pi*(radius^2)*(windspeed^3)
+}
+
+
+```
