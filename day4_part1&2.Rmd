@@ -36,3 +36,13 @@ for(i in seq_along(file_prefix)) {
   }
 }
 ```
+
+## Functions
+
+```{r}
+exclaim_age <- function(age) {
+  print(paste("I am", age, "years old!"))
+}
+
+exclaim_age(age=22)
+```
