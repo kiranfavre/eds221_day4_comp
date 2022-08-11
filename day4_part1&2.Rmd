@@ -165,3 +165,61 @@ means_over_columns(dataframe = mtcars)
 
 means_over_columns(dataframe = faithful)
 ```
+
+# Afternoon session
+
+comprehension check:
+
+this will produce a 3x4 matrix
+
+this looks at i=1, j=1-4. then i=2, j=1-4. then i=3, j=1-4. then i=4, j=1-4
+
+```{r}
+apples <- c(1, 2, 3, 4)
+price <- c(7, 10, 25)
+
+fruit_out <- matrix(nrow = length(price), ncol = length(apples))
+
+for (i in seq_along(apples)) {
+  for (j in seq_along(price)) {
+    total_cost <- price[j] *apples[i]
+    fruit_out[j,i] <- total_cost
+  }
+}
+```
+
+Our own examples
+
+```{r}
+clothing <- c("shirt", "pants", "shoes")
+color <- c("purple", "red", "blue", "white")
+
+
+our_clothes <- matrix(nrow = length(color), ncol = length(clothing))
+# clothing will be populated by column var and color by row
+
+for (i in seq_along(clothing)) {
+  for (j in seq_along(color)) {
+    clothing_details <- paste(color[j], clothing[i])
+    our_clothes[j, i] <- clothing_details
+  }
+}
+
+our_clothes
+```
+
+```{r}
+first_name <- c("kiran", "elise", "Michael")
+last_name <- c("chair", "table", "light")
+
+full_names <- matrix(nrow = length(first_name), ncol = length(last_name))
+
+for (i in seq_along(first_name)) {
+  for (j in seq_along(last_name)) {
+    add_names <- paste(first_name[i], last_name[j])
+    full_names[j,i] <- add_names
+  }
+}
+
+full_names
+```
